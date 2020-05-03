@@ -5,7 +5,7 @@ Este repositório contém um programa com o objetivo de calcular o imposto de re
 <h3>Pessoa Física</h3>
 <table>
   <thead>
-    <th>Faixa de Renda</th>
+    <th>Faixa Salarial</th>
     <th>Imposto de renda (%)</th>
   </thead>
   <tbody>
@@ -20,7 +20,7 @@ Este repositório contém um programa com o objetivo de calcular o imposto de re
   <tbody>
 </table>
 
-Será aplicado a porcentagem acima de acordo com a faixa salaria e descontados 50% das despesas médicas.
+Será aplicado a porcentagem acima de acordo com a faixa salarial e descontados 50% das despesas médicas.
 
 <h3>Pessoa Jurídica</h3>
 <table>
