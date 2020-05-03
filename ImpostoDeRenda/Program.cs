@@ -1,52 +1,70 @@
-﻿using System;
+﻿using ImpostoDeRenda.Entities;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace ImpostoDeRenda
 {
     class Program
     {
-        /// <summary>
-        /// Os cálculos foram feitos com a seguinte tabela
-        /// Faixa de Renda                  Imposto de renda (%)
-        /// de 0.00 a R$ 2000.00            Isento
-        /// de R$ 2000.01 até R$ 3000.00    8%
-        /// de R$ 3000.01 até R$ 4500.00    18%
-        /// Acima de R$ 4500.00             28%
-        /// 
-        /// Lembre que, se o salário for R$ 3002.00, a taxa que incide é de 8% apenas sobre R$ 1000.00, pois a faixa de
-        /// salário que fica de R$ 0.00 até R$ 2000.00 é isenta de Imposto de Renda.Neste caso a taxa é
-        /// de 8% sobre R$ 1000.00 + 18% sobre R$ 2.00, o que resulta em R$ 80.36 no total. 
-        /// </summary>
-        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Console.WriteLine("Digite o salário:");
-            double salario = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-            double impostoDevido;
+            List<TaxPayer> list = new List<TaxPayer>();
 
-            if (salario < 0)
-                Console.WriteLine("Valor incorreto");
-            else {
-                if (salario <= 2000)
-                    impostoDevido = 0;
-                else if (salario <= 3000)
-                    impostoDevido = (salario - 2000) * 0.08;
-                else if (salario <= 4500)
-                    impostoDevido = (salario - 3000) * 0.18 + 1000 * 0.08;
-                else
-                    impostoDevido = (salario - 4500.0) * 0.28 + 1500.0 * 0.18 + 1000.0 * 0.08;
+            Console.Write("Digite o número de contribuintes: ");
+            int n = int.Parse(Console.ReadLine());
 
-                if (impostoDevido == 0.0)
+            for (int i = 1; i <= n; i++)
+            {
+                bool tipoValido = false;
+                do
                 {
-                    Console.WriteLine("Isento");
-                }
-                else
-                {
-                    Console.WriteLine($"Imposto devido: R$ {impostoDevido.ToString("F2", CultureInfo.InvariantCulture)}");
-                }
+                    Console.Write("Pessoa física ou jurídica (F/J): ");
+                    string tipo = Console.ReadLine();
+
+                    if (tipo.ToUpper().Equals("J"))
+                    {
+                        tipoValido = true;
+                        Console.Write("Nome: ");
+                        string name = Console.ReadLine();
+                        Console.Write("Ganho anual: ");
+                        double anualIncome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                        Console.Write("Número de funcionários: ");
+                        int numberOfEmoployees = int.Parse(Console.ReadLine());
+                        list.Add(new Company(numberOfEmoployees, name, anualIncome));
+                    }
+                    else if (tipo.ToUpper().Equals("F"))
+                    {
+                        tipoValido = true;
+                        Console.Write("Nome: ");
+                        string name = Console.ReadLine();
+                        Console.Write("Ganho anual: ");
+                        double anualIncome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                        Console.Write("Despesas médicas: ");
+                        double healthExpenditures = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                        list.Add(new Individual(healthExpenditures, name, anualIncome));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Por favor, digite um tipo válido");
+                    }
+
+                } while (!tipoValido);
+
             }
 
+            Console.WriteLine();
+            Console.WriteLine("Impostos a receber:");
 
+            foreach (TaxPayer t in list)
+            {
+                Console.WriteLine(t);
+            }
+
+            double total = list.Sum(x => x.Tax());
+
+            Console.WriteLine($"Total: R${total}");
         }
     }
 }
