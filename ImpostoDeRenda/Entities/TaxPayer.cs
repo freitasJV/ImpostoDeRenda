@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using ImpostoDeRenda.Entities.Exceptions;
+using System.Globalization;
 
 namespace ImpostoDeRenda.Entities
 {
@@ -13,6 +14,11 @@ namespace ImpostoDeRenda.Entities
 
         protected TaxPayer(string name, double anualIncome)
         {
+            if (anualIncome <= 0)
+            {
+                throw new DomainException("Erro: ganho anual inválido");
+            }
+
             Name = name;
             AnualIncome = anualIncome;
         }

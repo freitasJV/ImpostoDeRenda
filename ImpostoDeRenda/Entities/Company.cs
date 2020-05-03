@@ -1,4 +1,6 @@
-﻿namespace ImpostoDeRenda.Entities
+﻿using ImpostoDeRenda.Entities.Exceptions;
+
+namespace ImpostoDeRenda.Entities
 {
     class Company : TaxPayer
     {
@@ -10,6 +12,11 @@
 
         public Company(int numberOfEmployees, string name, double anualIncome) : base (name, anualIncome)
         {
+            if (numberOfEmployees <= 0)
+            {
+                throw new DomainException("Erro: número de funcionários inválido");
+            }
+
             NumberOfEmployees = numberOfEmployees;
         }
 

@@ -1,4 +1,5 @@
 ﻿using ImpostoDeRenda.Entities;
+using ImpostoDeRenda.Entities.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,62 +11,75 @@ namespace ImpostoDeRenda
     {
         static void Main(string[] args)
         {
-            List<TaxPayer> list = new List<TaxPayer>();
-
-            Console.Write("Digite o número de contribuintes: ");
-            int n = int.Parse(Console.ReadLine());
-
-            for (int i = 1; i <= n; i++)
+            try
             {
-                bool tipoValido = false;
-                string tipo;
-                do
+                List<TaxPayer> list = new List<TaxPayer>();
+
+                Console.Write("Digite o número de contribuintes: ");
+                int n = int.Parse(Console.ReadLine());
+
+                for (int i = 1; i <= n; i++)
                 {
-                    Console.Write("Pessoa física ou jurídica (F/J): ");
-                    tipo = Console.ReadLine();
-                    if (!tipo.ToUpper().Equals("J") && !tipo.ToUpper().Equals("F"))
+                    bool tipoValido = false;
+                    string tipo;
+                    do
                     {
-                        Console.WriteLine("Por favor, digite um tipo válido");
+                        Console.Write("Pessoa física ou jurídica (F/J): ");
+                        tipo = Console.ReadLine();
+                        if (!tipo.ToUpper().Equals("J") && !tipo.ToUpper().Equals("F"))
+                        {
+                            Console.WriteLine("Por favor, digite um tipo válido");
+                        }
+                        else
+                        {
+                            tipoValido = true;
+                        }
+
+                    } while (!tipoValido);
+
+                    Console.Write("Nome: ");
+                    string name = Console.ReadLine();
+                    Console.Write("Ganho anual: ");
+                    double anualIncome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                    if (tipo.ToUpper().Equals("J"))
+                    {
+                        Console.Write("Número de funcionários: ");
+                        int numberOfEmoployees = int.Parse(Console.ReadLine());
+                        list.Add(new Company(numberOfEmoployees, name, anualIncome));
                     }
                     else
                     {
-                        tipoValido = true;
+                        Console.Write("Despesas médicas: ");
+                        double healthExpenditures = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                        list.Add(new Individual(healthExpenditures, name, anualIncome));
                     }
-
-                } while (!tipoValido);
-
-                Console.Write("Nome: ");
-                string name = Console.ReadLine();
-                Console.Write("Ganho anual: ");
-                double anualIncome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-
-                if (tipo.ToUpper().Equals("J"))
-                {
-                    Console.Write("Número de funcionários: ");
-                    int numberOfEmoployees = int.Parse(Console.ReadLine());
-                    list.Add(new Company(numberOfEmoployees, name, anualIncome));
-                }
-                else
-                {
-                    Console.Write("Despesas médicas: ");
-                    double healthExpenditures = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                    list.Add(new Individual(healthExpenditures, name, anualIncome));
                 }
 
+                Console.WriteLine();
+                Console.WriteLine("Impostos a receber:");
 
+                foreach (TaxPayer t in list)
+                {
+                    Console.WriteLine(t);
+                }
+
+                double total = list.Sum(x => x.Tax());
+
+                Console.WriteLine($"Total: R${total}");
             }
-
-            Console.WriteLine();
-            Console.WriteLine("Impostos a receber:");
-
-            foreach (TaxPayer t in list)
+            catch (DomainException e)
             {
-                Console.WriteLine(t);
+                Console.WriteLine(e.Message);
             }
-
-            double total = list.Sum(x => x.Tax());
-
-            Console.WriteLine($"Total: R${total}");
+            catch (FormatException e)
+            {
+                Console.WriteLine($"Erro de formatação: {e.Message}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Erro inesperado: {e.Message}");
+            }
         }
     }
 }

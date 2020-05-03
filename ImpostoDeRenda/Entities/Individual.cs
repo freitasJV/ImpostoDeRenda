@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImpostoDeRenda.Entities.Exceptions;
+using System;
 
 namespace ImpostoDeRenda.Entities
 {
@@ -12,6 +13,11 @@ namespace ImpostoDeRenda.Entities
 
         public Individual(double healthExpenditures, string name, double anualIncome) : base(name, anualIncome)
         {
+            if (healthExpenditures <= 0)
+            {
+                throw new DomainException("Erro: valor de despesas médicas inválido");
+            }
+
             HealthExpenditures = healthExpenditures;
         }
         public override double Tax()
