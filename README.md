@@ -5,7 +5,7 @@ Este repositório contém um programa com o objetivo de calcular o imposto de re
 <h3>Pessoa Física</h3>
 <table>
   <thead>
-    <th>Faixa de Renda</th>
+    <th>Faixa Salarial</th>
     <th>Imposto de renda (%)</th>
   </thead>
   <tbody>
