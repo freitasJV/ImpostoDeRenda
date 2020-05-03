@@ -18,39 +18,40 @@ namespace ImpostoDeRenda
             for (int i = 1; i <= n; i++)
             {
                 bool tipoValido = false;
+                string tipo;
                 do
                 {
                     Console.Write("Pessoa física ou jurídica (F/J): ");
-                    string tipo = Console.ReadLine();
-
-                    if (tipo.ToUpper().Equals("J"))
-                    {
-                        tipoValido = true;
-                        Console.Write("Nome: ");
-                        string name = Console.ReadLine();
-                        Console.Write("Ganho anual: ");
-                        double anualIncome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                        Console.Write("Número de funcionários: ");
-                        int numberOfEmoployees = int.Parse(Console.ReadLine());
-                        list.Add(new Company(numberOfEmoployees, name, anualIncome));
-                    }
-                    else if (tipo.ToUpper().Equals("F"))
-                    {
-                        tipoValido = true;
-                        Console.Write("Nome: ");
-                        string name = Console.ReadLine();
-                        Console.Write("Ganho anual: ");
-                        double anualIncome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                        Console.Write("Despesas médicas: ");
-                        double healthExpenditures = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                        list.Add(new Individual(healthExpenditures, name, anualIncome));
-                    }
-                    else
+                    tipo = Console.ReadLine();
+                    if (!tipo.ToUpper().Equals("J") && !tipo.ToUpper().Equals("F"))
                     {
                         Console.WriteLine("Por favor, digite um tipo válido");
                     }
+                    else
+                    {
+                        tipoValido = true;
+                    }
 
                 } while (!tipoValido);
+
+                Console.Write("Nome: ");
+                string name = Console.ReadLine();
+                Console.Write("Ganho anual: ");
+                double anualIncome = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                if (tipo.ToUpper().Equals("J"))
+                {
+                    Console.Write("Número de funcionários: ");
+                    int numberOfEmoployees = int.Parse(Console.ReadLine());
+                    list.Add(new Company(numberOfEmoployees, name, anualIncome));
+                }
+                else
+                {
+                    Console.Write("Despesas médicas: ");
+                    double healthExpenditures = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    list.Add(new Individual(healthExpenditures, name, anualIncome));
+                }
+
 
             }
 

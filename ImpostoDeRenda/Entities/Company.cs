@@ -4,6 +4,10 @@
     {
         public int NumberOfEmployees { get; set; }
 
+        public Company()
+        {
+        }
+
         public Company(int numberOfEmployees, string name, double anualIncome) : base (name, anualIncome)
         {
             NumberOfEmployees = numberOfEmployees;
